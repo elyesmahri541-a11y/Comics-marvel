@@ -34,31 +34,27 @@ jobs:
 
           headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
 
-          print("Recherche des parutions récentes de la semaine sur Fandom...")
+          print("Recherche des dernières modifications et créations de comics sur Fandom...")
 
-          # On cible directement la catégorie des comics sortis cette semaine
-          categories_target = [
-              "Category:Comics_Released_This_Week",
-              "Category:Comics_Released_Today"
-          ]
+          # On demande à Fandom les 50 dernières fiches créées ou éditées récemment
+          url_recent = "https://marvel.fandom.com/api.php?action=query&list=recentchanges&rclimit=50&rcnamespace=0&format=json"
 
           titres_a_importer = set()
 
-          for cat in categories_target:
-              url_cat = f"https://marvel.fandom.com/api.php?action=query&list=categorymembers&cmtitle={cat}&cmlimit=100&format=json"
-              try:
-                  res = requests.get(url_cat, headers=headers).json()
-                  members = res.get("query", {}).get("categorymembers", [])
-                  for m in members:
-                      title = m["title"]
-                      if not title.startswith("Category:") and not title.startswith("File:") and not title.startswith("Talk:"):
-                          titres_a_importer.add(title)
-              except Exception as e:
-                  print(f"Erreur sur la catégorie {cat}: {e}")
+          try:
+              res = requests.get(url_recent, headers=headers).json()
+              changes = res.get("query", {}).get("recentchanges", [])
+              for c in changes:
+                  title = c.get("title", "")
+                  # On s'assure d'importer des fiches d'articles récents
+                  if title and not title.startswith("Category:") and not title.startswith("File:"):
+                      titres_a_importer.add(title)
+          except Exception as e:
+              print(f"Erreur lors de la récupération : {e}")
 
-          print(f"Total de comics trouvés : {len(titres_a_importer)}")
+          print(f"Nombre de fiches récentes trouvées : {len(titres_a_importer)}")
 
-          # Téléchargement et conversion de chaque fiche
+          # Téléchargement de chaque fiche
           for titre in titres_a_importer:
               print(f"Importation : {titre}...")
               url_parse = f"https://marvel.fandom.com/api.php?action=parse&page={titre.replace(' ', '_')}&format=json"
@@ -67,11 +63,11 @@ jobs:
                   if "parse" in res_parse:
                       contenu_html = res_parse["parse"]["text"]["*"]
                       
-                      # Redirection des liens Fandom vers ton propre dossier local
+                      # Redirection des liens internes vers ton propre dossier local
                       contenu_propre = re.sub(r'href="/wiki/', r'href="./', contenu_html)
 
                       # Nettoyage du nom de fichier
-                      nom_clean = titre.replace(' ', '_').replace('/', '_').replace(':', '_')
+                      nom_clean = titre.replace(' ', '_').replace('/', '_').replace(':', '_').replace('?', '')
                       nom_fichier = f"docs/{nom_clean}.html"
 
                       with open(nom_fichier, "w", encoding="utf-8") as f:
@@ -88,6 +84,5 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add .
-          git commit -m "Mise à jour automatique des fiches Marvel de la semaine" || exit 0
+          git commit -m "Mise à jour automatique des fiches Marvel récentes" || exit 0
           git push
-
