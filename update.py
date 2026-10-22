@@ -2,7 +2,7 @@ import os
 import requests
 import re
 
-# 1. Création du dossier /docs s'il n'existe pas
+# Création du dossier docs s'il n'existe pas
 if not os.path.exists("docs"):
     os.makedirs("docs")
 
@@ -33,7 +33,7 @@ for titre in titres_a_importer:
             contenu_html = res_parse["parse"]["text"]["*"]
             contenu_propre = re.sub(r'href="/wiki/', r'href="./', contenu_html)
 
-            nom_clean = titre.replace(' ', '_').replace('/', '_').replace(':', '_').replace('?', '')
+            nom_clean = re.sub(r'[\\/*?:"<>|]', '_', titre).replace(' ', '_')
             nom_fichier = f"docs/{nom_clean}.html"
 
             with open(nom_fichier, "w", encoding="utf-8") as f:
@@ -50,13 +50,20 @@ print("2. Génération de la page d'accueil (index.html)...")
 fichiers = [f for f in os.listdir("docs") if f.endswith(".html")]
 fichiers.sort()
 
-liens_html = ""
-for f in fichiers:
-    nom_lisible = f.replace(".html", "").replace("_", " ")
-    liens_html += f"<li class='card'><a href='docs/{f}'>{nom_lisible}</a></li>\n"
-
-html_header = """<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write("<!DOCTYPE html>\n")
+    f.write("<html lang='fr'>\n")
+    f.write("<head>\n")
+    f.write("    <meta charset='UTF-8'>\n")
+    f.write("    <meta name='viewport' content='width=device-width, initial-scale=1.0'>\n")
+    f.write("    <title>Marvel Database - Encyclopédie & Comics</title>\n")
+    f.write("    <style>\n")
+    f.write("        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f0f12; color: #ffffff; margin: 0; padding: 20px; }\n")
+    f.write("        header { text-align: center; padding: 30px 10px; background: #e62429; border-radius: 8px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(230, 36, 41, 0.4); }\n")
+    f.write("        h1 { margin: 0; font-size: 2.5em; text-transform: uppercase; letter-spacing: 2px; }\n")
+    f.write("        p.subtitle { margin-top: 5px; font-weight: 300; opacity: 0.9; }\n")
+    f.write("        .search-box { text-align: center; margin-bottom: 30px; }\n")
+    f.write("        input[type='text'] { width: 80%; max-width: 500px; padding: 12px 20px; font-size: 16px; border-radius: 25px; border: none; outline: none; }\n")
+    f.write("        .ad-space { background: #1a1a24; border: 1px dashed #444; padding: 15px; text-align: center; margin: 20px auto; max-width: 800px; color: #888; border-radius: 6px; }\n")
+    f.write("        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; list-style: none; padding: 0; max-width: 1200px; margin: 0 auto; }\n")
+    f.write("        .card { background: #1f1f2e; border-radius: 8px; padding: 15px; transition: transform 0.2s, background 0.2s; border: 1px solid #2d2d3f; }\
