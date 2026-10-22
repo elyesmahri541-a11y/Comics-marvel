@@ -32,38 +32,55 @@ jobs:
           if not os.path.exists("docs"):
               os.makedirs("docs")
 
-          print("Recherche des derniers comics...")
-          
-          url_cat = "https://marvel.fandom.com/api.php?action=query&list=categorymembers&cmtitle=Category:2026_Comics&cmlimit=20&format=json"
-          headers = {'User-Agent': 'Mozilla/5.0'}
-          
-          try:
-              response = requests.get(url_cat, headers=headers).json()
-              pages = response.get("query", {}).get("categorymembers", [])
-              
-              if not pages:
-                  pages = [{"title": "Amazing Spider-Man Vol 7 1001"}, {"title": "Avengers Vol 9 1"}]
+          headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
 
-              for item in pages:
-                  titre_page = item["title"]
-                  if "Category:" in titre_page or "Talk:" in titre_page:
-                      continue
-                      
-                  print(f"Téléchargement du comic : {titre_page}...")
-                  url_parse = f"https://marvel.fandom.com/api.php?action=parse&page={titre_page.replace(' ', '_')}&format=json"
-                  
+          print("Recherche des parutions récentes de la semaine sur Fandom...")
+
+          # On cible directement la catégorie des comics sortis cette semaine
+          categories_target = [
+              "Category:Comics_Released_This_Week",
+              "Category:Comics_Released_Today"
+          ]
+
+          titres_a_importer = set()
+
+          for cat in categories_target:
+              url_cat = f"https://marvel.fandom.com/api.php?action=query&list=categorymembers&cmtitle={cat}&cmlimit=100&format=json"
+              try:
+                  res = requests.get(url_cat, headers=headers).json()
+                  members = res.get("query", {}).get("categorymembers", [])
+                  for m in members:
+                      title = m["title"]
+                      if not title.startswith("Category:") and not title.startswith("File:") and not title.startswith("Talk:"):
+                          titres_a_importer.add(title)
+              except Exception as e:
+                  print(f"Erreur sur la catégorie {cat}: {e}")
+
+          print(f"Total de comics trouvés : {len(titres_a_importer)}")
+
+          # Téléchargement et conversion de chaque fiche
+          for titre in titres_a_importer:
+              print(f"Importation : {titre}...")
+              url_parse = f"https://marvel.fandom.com/api.php?action=parse&page={titre.replace(' ', '_')}&format=json"
+              try:
                   res_parse = requests.get(url_parse, headers=headers).json()
                   if "parse" in res_parse:
                       contenu_html = res_parse["parse"]["text"]["*"]
-                      contenu_propre = re.sub(r'href="/wiki/', r'href="./', contenu_html)
                       
-                      nom_fichier = f"docs/{titre_page.replace(' ', '_').replace('/', '_')}.html"
+                      # Redirection des liens Fandom vers ton propre dossier local
+                      contenu_propre = re.sub(r'href="/wiki/', r'href="./', contenu_html)
+
+                      # Nettoyage du nom de fichier
+                      nom_clean = titre.replace(' ', '_').replace('/', '_').replace(':', '_')
+                      nom_fichier = f"docs/{nom_clean}.html"
+
                       with open(nom_fichier, "w", encoding="utf-8") as f:
-                          f.write(f"<h1>{titre_page}</h1>\n")
+                          f.write(f"<h1>{titre}</h1>\n")
                           f.write(contenu_propre)
-                      print(f"Comic '{titre_page}' enregistré !")
-          except Exception as e:
-              print(f"Erreur : {e}")
+                          
+                      print(f"Enregistré : {nom_fichier}")
+              except Exception as e:
+                  print(f"Erreur lors du téléchargement de {titre}: {e}")
           EOF
 
       - name: Envoyer les changements sur le site
@@ -71,5 +88,6 @@ jobs:
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           git add .
-          git commit -m "Mise à jour automatique des fiches Marvel" || exit 0
+          git commit -m "Mise à jour automatique des fiches Marvel de la semaine" || exit 0
           git push
+
