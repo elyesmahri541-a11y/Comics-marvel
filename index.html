@@ -1,1 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marvel Database - Encyclopédie & Comics</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f0f12; color: #ffffff; margin: 0; padding: 20px; }
+        header { text-align: center; padding: 30px 10px; background: #e62429; border-radius: 8px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(230, 36, 41, 0.4); }
+        h1 { margin: 0; font-size: 2.5em; text-transform: uppercase; letter-spacing: 2px; }
+        p.subtitle { margin-top: 5px; font-weight: 300; opacity: 0.9; }
+        .search-box { text-align: center; margin-bottom: 30px; }
+        input[type="text"] { width: 80%; max-width: 500px; padding: 12px 20px; font-size: 16px; border-radius: 25px; border: none; outline: none; }
+        .ad-space { background: #1a1a24; border: 1px dashed #444; padding: 15px; text-align: center; margin: 20px auto; max-width: 800px; color: #888; border-radius: 6px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; list-style: none; padding: 0; max-width: 1200px; margin: 0 auto; }
+        .card { background: #1f1f2e; border-radius: 8px; padding: 15px; transition: transform 0.2s, background 0.2s; border: 1px solid #2d2d3f; }
+        .card:hover { transform: translateY(-3px); background: #2a2a3d; border-color: #e62429; }
+        .card a { color: #ffffff; text-decoration: none; font-weight: 600; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Marvel Database</h1>
+        <p class="subtitle">Base de données automatisée des fiches et comics Marvel</p>
+    </header>
+    <div class="ad-space">
+        <p>Espace Publicitaire (AdSense)</p>
+    </div>
+    <div class="search-box">
+        <input type="text" id="searchInput" onkeyup="filterPages()" placeholder="🔍 Rechercher un personnage, comic, série...">
+    </div>
+    <p style="text-align: center; color: #aaa;">Pages disponibles : <strong>42</strong></p>
+    <ul class="grid" id="pagesList">
+        <li class='card'><a href='docs/Amazing_Spider-Man_Facsimile_Edition_Vol_3_10.html'>Amazing Spider-Man Facsimile Edition Vol 3 10</a></li>
+        <li class='card'><a href='docs/Amazing_Spider-Man_Vol_7_1001.html'>Amazing Spider-Man Vol 7 1001</a></li>
+        <li class='card'><a href='docs/Avengers_Vol_9_1.html'>Avengers Vol 9 1</a></li>
+        <li class='card'><a href='docs/Black_Cat_Vol_3_17.html'>Black Cat Vol 3 17</a></li>
+        <li class='card'><a href='docs/Black_Cat_Vol_3_18.html'>Black Cat Vol 3 18</a></li>
+        <li class='card'><a href='docs/Blackagar_Boltagon_(Earth-616).html'>Blackagar Boltagon (Earth-616)</a></li>
+        <li class='card'><a href='docs/Blackagar_Boltagon_(Earth-616)_Expanded_History.html'>Blackagar Boltagon (Earth-616) Expanded History</a></li>
+        <li class='card'><a href='docs/Character_Index_H.html'>Character Index H</a></li>
+        <li class='card'><a href='docs/Conan_(Earth-616).html'>Conan (Earth-616)</a></li>
+        <li class='card'><a href='docs/Conan_(Earth-616)_Expanded_History.html'>Conan (Earth-616) Expanded History</a></li>
+        <li class='card'><a href='docs/Crick-Hits.html'>Crick-Hits</a></li>
+        <li class='card'><a href='docs/Earth-TRN1931.html'>Earth-TRN1931</a></li>
+        <li class='card'><a href='docs/Earth-TRN1931_Gallery.html'>Earth-TRN1931 Gallery</a></li>
+        <li class='card'><a href='docs/Fossilized_Amulet_Gallery.html'>Fossilized Amulet Gallery</a></li>
+        <li class='card'><a href='docs/Hero_Vol_1_1.html'>Hero Vol 1 1</a></li>
+        <li class='card'><a href='docs/Iron_Man_(film).html'>Iron Man (film)</a></li>
+        <li class='card'><a href='docs/Iron_Man_Vol_7_15.html'>Iron Man Vol 7 15</a></li>
+        <li class='card'><a href='docs/Jennifer_Walters_(Earth-TRN1854).html'>Jennifer Walters (Earth-TRN1854)</a></li>
+        <li class='card'><a href='docs/John_Davison_Rockerduck_(Earth-TRN1992).html'>John Davison Rockerduck (Earth-TRN1992)</a></li>
+        <li class='card'><a href='docs/John_Jonah_Duck_(Earth-TRN1992).html'>John Jonah Duck (Earth-TRN1992)</a></li>
+        <li class='card'><a href='docs/Journey_Into_Mystery_Vol_1_97.html'>Journey Into Mystery Vol 1 97</a></li>
+        <li class='card'><a href='docs/Lisa_Molinari_(Earth-616).html'>Lisa Molinari (Earth-616)</a></li>
+        <li class='card'><a href='docs/Lisa_Molinari_(Earth-616)_Gallery.html'>Lisa Molinari (Earth-616) Gallery</a></li>
+        <li class='card'><a href='docs/Marc_Spector__Moon_Knight_Vol_2_12.html'>Marc Spector  Moon Knight Vol 2 12</a></li>
+        <li class='card'><a href='docs/Mort_Kreeger.html'>Mort Kreeger</a></li>
+        <li class='card'><a href='docs/Mr._B_(Earth-83930).html'>Mr. B (Earth-83930)</a></li>
+        <li class='card'><a href='docs/Murphy.html'>Murphy</a></li>
+        <li class='card'><a href='docs/Murphy_(U.S._Army)_(Earth-616).html'>Murphy (U.S. Army) (Earth-616)</a></li>
+        <li class='card'><a href='docs/Namor_McKenzie_(Earth-616).html'>Namor McKenzie (Earth-616)</a></li>
+        <li class='card'><a href='docs/Odin_Borson_(Earth-72630).html'>Odin Borson (Earth-72630)</a></li>
+        <li class='card'><a href='docs/Officer_Murphy_(Alphabet_City)_(Earth-616).html'>Officer Murphy (Alphabet City) (Earth-616)</a></li>
+        <li class='card'><a href='docs/Officer_Murphy_(ESU)_(Earth-616).html'>Officer Murphy (ESU) (Earth-616)</a></li>
+        <li class='card'><a href='docs/Predator_vs._Punisher_Vol_1_3.html'>Predator vs. Punisher Vol 1 3</a></li>
+        <li class='card'><a href='docs/Punisher_Vol_15_13.html'>Punisher Vol 15 13</a></li>
+        <li class='card'><a href='docs/Ricardo_Villanueva_(Earth-616).html'>Ricardo Villanueva (Earth-616)</a></li>
+        <li class='card'><a href='docs/Scrooge_McDuck_(Earth-TRN1992).html'>Scrooge McDuck (Earth-TRN1992)</a></li>
+        <li class='card'><a href='docs/Secret_Wars_Facsimile_Edition_Vol_1_1.html'>Secret Wars Facsimile Edition Vol 1 1</a></li>
+        <li class='card'><a href='docs/Spider-Man.html'>Spider-Man</a></li>
+        <li class='card'><a href='docs/Starblast_(Event).html'>Starblast (Event)</a></li>
+        <li class='card'><a href='docs/Tiboro's_Coat.html'>Tiboro's Coat</a></li>
+        <li class='card'><a href='docs/Wade_Wilson__Deadpool_Vol_1_12.html'>Wade Wilson  Deadpool Vol 1 12</a></li>
+        <li class='card'><a href='docs/Zeno_Saturn.html'>Zeno Saturn</a></li>
 
+    </ul>
+    <div class="ad-space" style="margin-top: 40px;">
+        <p>Espace Publicitaire (AdSense)</p>
+    </div>
+    <script>
+        function filterPages() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.getElementsByClassName('card');
+            for (let i = 0; i < cards.length; i++) {
+                let text = cards[i].innerText.toLowerCase();
+                cards[i].style.display = text.includes(input) ? "" : "none";
+            }
+        }
+    </script>
+</body>
+</html>
