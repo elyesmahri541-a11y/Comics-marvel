@@ -8,40 +8,42 @@ if not os.path.exists("docs"):
 
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
 
-print("1. Recherche spécifique des derniers comics sur Fandom...")
+print("1. Récupération intégrale de TOUS les comics de 2026...")
 
-# On interroge l'API pour récupérer les pages de la catégorie des comics récents de l'année
-url_cat = "https://marvel.fandom.com/api.php?action=query&list=categorymembers&cmtitle=Category:2026_Comics&cmlimit=100&format=json"
+categories = [
+    "Category:2026_Comics",
+    "Category:Comics_released_in_2026"
+]
 
 titres_a_importer = set()
 
-try:
-    res = requests.get(url_cat, headers=headers).json()
-    members = res.get("query", {}).get("categorymembers", [])
-    for m in members:
-        title = m["title"]
-        # On évite les catégories et pages de discussion
-        if title and not title.startswith("Category:") and not title.startswith("File:") and not title.startswith("Talk:"):
-            titres_a_importer.add(title)
-except Exception as e:
-    print(f"Erreur lors de la récupération des comics : {e}")
-
-# Si la catégorie renvoie peu de résultats, on complète avec une recherche sur les ajouts récents de comics
-if len(titres_a_importer) < 5:
-    url_recent = "https://marvel.fandom.com/api.php?action=query&list=recentchanges&rclimit=100&rcnamespace=0&format=json"
-    try:
-        res = requests.get(url_recent, headers=headers).json()
-        changes = res.get("query", {}).get("recentchanges", [])
-        for c in changes:
-            title = c.get("title", "")
-            # On ne garde QUE les titres qui ressemblent à un comic (contiennent "Vol" ou "#")
-            if title and ("Vol" in title or "#" in title or "Comic" in title):
-                if not title.startswith("Category:") and not title.startswith("File:") and not title.startswith("Talk:"):
+for cat in categories:
+    cmcontinue = ""
+    while True:
+        url = f"https://marvel.fandom.com/api.php?action=query&list=categorymembers&cmtitle={cat}&cmlimit=500&format=json"
+        if cmcontinue:
+            url += f"&cmcontinue={cmcontinue}"
+        
+        try:
+            res = requests.get(url, headers=headers).json()
+            query = res.get("query", {})
+            members = query.get("categorymembers", [])
+            
+            for m in members:
+                title = m["title"]
+                if title and not title.startswith("Category:") and not title.startswith("File:") and not title.startswith("Talk:") and not title.startswith("Template:"):
                     titres_a_importer.add(title)
-    except Exception as e:
-        print(f"Erreur recentchanges : {e}")
+            
+            # Gestion de la continuation pour récupérer toutes les pages suivantes
+            if "continue" in res and "cmcontinue" in res["continue"]:
+                cmcontinue = res["continue"]["cmcontinue"]
+            else:
+                break
+        except Exception as e:
+            print(f"Erreur sur {cat}: {e}")
+            break
 
-print(f"Nouveaux comics à télécharger : {len(titres_a_importer)}")
+print(f"Nombre total de comics 2026 trouvés : {len(titres_a_importer)}")
 
 for titre in titres_a_importer:
     url_parse = f"https://marvel.fandom.com/api.php?action=parse&page={titre.replace(' ', '_')}&format=json"
@@ -132,4 +134,3 @@ with open("index.html", "w", encoding="utf-8") as f:
     f.write(final_html)
 
 print("Index.html créé avec succès !")
-
