@@ -50,20 +50,67 @@ print("2. Génération de la page d'accueil (index.html)...")
 fichiers = [f for f in os.listdir("docs") if f.endswith(".html")]
 fichiers.sort()
 
+liens_html = ""
+for nom_fichier in fichiers:
+    nom_lisible = nom_fichier.replace(".html", "").replace("_", " ")
+    liens_html += f"        <li class='card'><a href='docs/{nom_fichier}'>{nom_lisible}</a></li>\n"
+
+template_html = """<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marvel Database - Encyclopédie & Comics</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f0f12; color: #ffffff; margin: 0; padding: 20px; }
+        header { text-align: center; padding: 30px 10px; background: #e62429; border-radius: 8px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(230, 36, 41, 0.4); }
+        h1 { margin: 0; font-size: 2.5em; text-transform: uppercase; letter-spacing: 2px; }
+        p.subtitle { margin-top: 5px; font-weight: 300; opacity: 0.9; }
+        .search-box { text-align: center; margin-bottom: 30px; }
+        input[type="text"] { width: 80%; max-width: 500px; padding: 12px 20px; font-size: 16px; border-radius: 25px; border: none; outline: none; }
+        .ad-space { background: #1a1a24; border: 1px dashed #444; padding: 15px; text-align: center; margin: 20px auto; max-width: 800px; color: #888; border-radius: 6px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; list-style: none; padding: 0; max-width: 1200px; margin: 0 auto; }
+        .card { background: #1f1f2e; border-radius: 8px; padding: 15px; transition: transform 0.2s, background 0.2s; border: 1px solid #2d2d3f; }
+        .card:hover { transform: translateY(-3px); background: #2a2a3d; border-color: #e62429; }
+        .card a { color: #ffffff; text-decoration: none; font-weight: 600; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Marvel Database</h1>
+        <p class="subtitle">Base de données automatisée des fiches et comics Marvel</p>
+    </header>
+    <div class="ad-space">
+        <p>Espace Publicitaire (AdSense)</p>
+    </div>
+    <div class="search-box">
+        <input type="text" id="searchInput" onkeyup="filterPages()" placeholder="🔍 Rechercher un personnage, comic, série...">
+    </div>
+    <p style="text-align: center; color: #aaa;">Pages disponibles : <strong>__NB_PAGES__</strong></p>
+    <ul class="grid" id="pagesList">
+__LIENS_PAGES__
+    </ul>
+    <div class="ad-space" style="margin-top: 40px;">
+        <p>Espace Publicitaire (AdSense)</p>
+    </div>
+    <script>
+        function filterPages() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.getElementsByClassName('card');
+            for (let i = 0; i < cards.length; i++) {
+                let text = cards[i].innerText.toLowerCase();
+                cards[i].style.display = text.includes(input) ? "" : "none";
+            }
+        }
+    </script>
+</body>
+</html>
+"""
+
+final_html = template_html.replace("__NB_PAGES__", str(len(fichiers)))
+final_html = final_html.replace("__LIENS_PAGES__", liens_html)
+
 with open("index.html", "w", encoding="utf-8") as f:
-    f.write("<!DOCTYPE html>\n")
-    f.write("<html lang='fr'>\n")
-    f.write("<head>\n")
-    f.write("    <meta charset='UTF-8'>\n")
-    f.write("    <meta name='viewport' content='width=device-width, initial-scale=1.0'>\n")
-    f.write("    <title>Marvel Database - Encyclopédie & Comics</title>\n")
-    f.write("    <style>\n")
-    f.write("        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f0f12; color: #ffffff; margin: 0; padding: 20px; }\n")
-    f.write("        header { text-align: center; padding: 30px 10px; background: #e62429; border-radius: 8px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(230, 36, 41, 0.4); }\n")
-    f.write("        h1 { margin: 0; font-size: 2.5em; text-transform: uppercase; letter-spacing: 2px; }\n")
-    f.write("        p.subtitle { margin-top: 5px; font-weight: 300; opacity: 0.9; }\n")
-    f.write("        .search-box { text-align: center; margin-bottom: 30px; }\n")
-    f.write("        input[type='text'] { width: 80%; max-width: 500px; padding: 12px 20px; font-size: 16px; border-radius: 25px; border: none; outline: none; }\n")
-    f.write("        .ad-space { background: #1a1a24; border: 1px dashed #444; padding: 15px; text-align: center; margin: 20px auto; max-width: 800px; color: #888; border-radius: 6px; }\n")
-    f.write("        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; list-style: none; padding: 0; max-width: 1200px; margin: 0 auto; }\n")
-    f.write("        .card { background: #1f1f2e; border-radius: 8px; padding: 15px; transition: transform 0.2s, background 0.2s; border: 1px solid #2d2d3f; }\
+    f.write(final_html)
+
+print("Index.html créé avec succès !")
