@@ -1,17 +1,39 @@
+name: Mettre a jour le Wiki Marvel
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Récupérer le code du dépôt
+        uses: actions/checkout@v4
+
+      - name: Configurer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Installer les outils nécessaires
+        run: pip install requests beautifulsoup4
+
       - name: Lancer le script de téléchargement des comics récents
         run: |
           python - <<'EOF'
           import os
           import requests
           import re
-          from bs4 import BeautifulSoup
 
           if not os.path.exists("docs"):
               os.makedirs("docs")
 
           print("Recherche des derniers comics...")
           
-          # On interroge l'API de Fandom pour récupérer les pages de comics récents ou de la catégorie de l'année en cours
           url_cat = "https://marvel.fandom.com/api.php?action=query&list=categorymembers&cmtitle=Category:2026_Comics&cmlimit=20&format=json"
           headers = {'User-Agent': 'Mozilla/5.0'}
           
@@ -20,12 +42,10 @@
               pages = response.get("query", {}).get("categorymembers", [])
               
               if not pages:
-                  # Si la catégorie spécifique n'a pas renvoyé de résultats, on prend une liste de secours
-                  pages = [{"title": "Amazing Spider-Man Vol 7 1"}, {"title": "Avengers Vol 9 1"}]
+                  pages = [{"title": "Amazing Spider-Man Vol 7 1001"}, {"title": "Avengers Vol 9 1"}]
 
               for item in pages:
                   titre_page = item["title"]
-                  # On évite les pages spéciales du wiki
                   if "Category:" in titre_page or "Talk:" in titre_page:
                       continue
                       
@@ -46,3 +66,10 @@
               print(f"Erreur : {e}")
           EOF
 
+      - name: Envoyer les changements sur le site
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m "Mise à jour automatique des fiches Marvel" || exit 0
+          git push
