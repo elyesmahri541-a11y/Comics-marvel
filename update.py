@@ -1,0 +1,62 @@
+import os
+import requests
+import re
+
+# 1. Création du dossier /docs s'il n'existe pas
+if not os.path.exists("docs"):
+    os.makedirs("docs")
+
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
+
+print("1. Recherche des dernières modifications sur Fandom...")
+url_recent = "https://marvel.fandom.com/api.php?action=query&list=recentchanges&rclimit=50&rcnamespace=0&format=json"
+
+titres_a_importer = set()
+
+try:
+    res = requests.get(url_recent, headers=headers).json()
+    changes = res.get("query", {}).get("recentchanges", [])
+    for c in changes:
+        title = c.get("title", "")
+        if title and not title.startswith("Category:") and not title.startswith("File:") and not title.startswith("Talk:"):
+            titres_a_importer.add(title)
+except Exception as e:
+    print(f"Erreur lors de la récupération : {e}")
+
+print(f"Fiches à télécharger : {len(titres_a_importer)}")
+
+for titre in titres_a_importer:
+    url_parse = f"https://marvel.fandom.com/api.php?action=parse&page={titre.replace(' ', '_')}&format=json"
+    try:
+        res_parse = requests.get(url_parse, headers=headers).json()
+        if "parse" in res_parse:
+            contenu_html = res_parse["parse"]["text"]["*"]
+            contenu_propre = re.sub(r'href="/wiki/', r'href="./', contenu_html)
+
+            nom_clean = titre.replace(' ', '_').replace('/', '_').replace(':', '_').replace('?', '')
+            nom_fichier = f"docs/{nom_clean}.html"
+
+            with open(nom_fichier, "w", encoding="utf-8") as f:
+                f.write("<!DOCTYPE html><html lang='fr'><head><meta charset='UTF-8'><title>" + titre + "</title><style>body{font-family:sans-serif;padding:20px;max-width:1000px;margin:auto;line-height:1.6;} img{max-width:100%;height:auto;}</style></head><body>")
+                f.write("<p><a href='../index.html'>← Retour à l'accueil</a></p>")
+                f.write("<h1>" + titre + "</h1>\n")
+                f.write(contenu_propre)
+                f.write("</body></html>")
+    except Exception as e:
+        print(f"Erreur sur {titre}: {e}")
+
+print("2. Génération de la page d'accueil (index.html)...")
+
+fichiers = [f for f in os.listdir("docs") if f.endswith(".html")]
+fichiers.sort()
+
+liens_html = ""
+for f in fichiers:
+    nom_lisible = f.replace(".html", "").replace("_", " ")
+    liens_html += f"<li class='card'><a href='docs/{f}'>{nom_lisible}</a></li>\n"
+
+html_header = """<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content
