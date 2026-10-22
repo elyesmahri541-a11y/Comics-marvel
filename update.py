@@ -8,47 +8,38 @@ if not os.path.exists("docs"):
 
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
 
-print("1. Récupération intégrale de TOUS les comics de 2026 (Pagination active)...")
-
-# Les catégories officielles sur Marvel Database Fandom
-categories = [
-    "Category:2026_Comic_Books",
-    "Category:Comics_released_in_2026",
-    "Category:2026_issues"
-]
+print("1. Recherche intelligente et globale des fiches Marvel...")
 
 titres_a_importer = set()
 
-for cat in categories:
-    cmcontinue = ""
-    print(f"Examen de la catégorie : {cat}")
-    while True:
-        url = f"https://marvel.fandom.com/api.php?action=query&list=categorymembers&cmtitle={cat}&cmlimit=500&format=json"
-        if cmcontinue:
-            url += f"&cmcontinue={cmcontinue}"
-        
-        try:
-            res = requests.get(url, headers=headers).json()
-            query = res.get("query", {})
-            members = query.get("categorymembers", [])
-            
-            for m in members:
-                title = m["title"]
-                if title and not title.startswith("Category:") and not title.startswith("File:") and not title.startswith("Talk:") and not title.startswith("Template:"):
-                    titres_a_importer.add(title)
-            
-            # Si Fandom indique qu'il y a d'autres pages dans cette catégorie, on continue
-            if "continue" in res and "cmcontinue" in res["continue"]:
-                cmcontinue = res["continue"]["cmcontinue"]
-            else:
-                break
-        except Exception as e:
-            print(f"Erreur sur {cat}: {e}")
-            break
+# Stratégie 1 : Recherche via l'API Fandom pour tout ce qui concerne 2026 ou les volumes
+mots_cles = ["2026", "Vol", "Comic", "Spider-Man", "Avengers", "X-Men"]
+for mot in mots_cles:
+    url_search = f"https://marvel.fandom.com/api.php?action=query&list=search&srsearch={mot}&srlimit=200&format=json"
+    try:
+        res = requests.get(url_search, headers=headers).json()
+        search_results = res.get("query", {}).get("search", [])
+        for item in search_results:
+            title = item["title"]
+            if title and not title.startswith("Category:") and not title.startswith("File:") and not title.startswith("Talk:") and not title.startswith("Template:"):
+                titres_a_importer.add(title)
+    except Exception as e:
+        print(f"Erreur recherche {mot}: {e}")
 
-print(f"Total cumulé de comics 2026 trouvés : {len(titres_a_importer)}")
+# Stratégie 2 : Ajout des modifications récentes pour capturer les nouveautés en temps réel
+url_recent = "https://marvel.fandom.com/api.php?action=query&list=recentchanges&rclimit=250&rcnamespace=0&format=json"
+try:
+    res_recent = requests.get(url_recent, headers=headers).json()
+    for c in res_recent.get("query", {}).get("recentchanges", []):
+        title = c.get("title", "")
+        if title and not title.startswith("Category:") and not title.startswith("File:") and not title.startswith("Talk:") and not title.startswith("Template:"):
+            titres_a_importer.add(title)
+except Exception as e:
+    print(f"Erreur recentchanges: {e}")
 
-print("2. Téléchargement des fiches HTML...")
+print(f"Total de fiches uniques prêtes à être téléchargées : {len(titres_a_importer)}")
+
+print("2. Téléchargement et nettoyage des fiches HTML...")
 for titre in titres_a_importer:
     url_parse = f"https://marvel.fandom.com/api.php?action=parse&page={titre.replace(' ', '_')}&format=json"
     try:
@@ -108,7 +99,7 @@ template_html = """<!DOCTYPE html>
         <p>Espace Publicitaire (AdSense)</p>
     </div>
     <div class="search-box">
-        <input type="text" id="searchInput" onkeyup="filterPages()" placeholder="🔍 Rechercher un comic...">
+        <input type="text" id="searchInput" onkeyup="filterPages()" placeholder="🔍 Rechercher un comic, personnage...">
     </div>
     <p style="text-align: center; color: #aaa;">Pages disponibles : <strong>__NB_PAGES__</strong></p>
     <ul class="grid" id="pagesList">
