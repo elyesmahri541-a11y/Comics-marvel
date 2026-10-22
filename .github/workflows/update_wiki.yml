@@ -49,9 +49,8 @@ jobs:
           except Exception as e:
               print(f"Erreur lors de la récupération : {e}")
 
-          print(f"fiches à télécharger : {len(titres_a_importer)}")
+          print(f"Fiches à télécharger : {len(titres_a_importer)}")
 
-          # Importation des pages HTML
           for titre in titres_a_importer:
               url_parse = f"https://marvel.fandom.com/api.php?action=parse&page={titre.replace(' ', '_')}&format=json"
               try:
@@ -64,10 +63,12 @@ jobs:
                       nom_fichier = f"docs/{nom_clean}.html"
 
                       with open(nom_fichier, "w", encoding="utf-8") as f:
-                          f.write(f"<!DOCTYPE html><html lang='fr'><head><meta charset='UTF-8'><title>{titre}</title><style>body{{font-family:sans-serif;padding:20px;max-width:1000px;margin:auto;line-height:1.6;}} img{{max-width:100%;height:auto;}}</style></head><body>")
-                          f.write(f"<p><a href='../index.html'>← Retour à l'accueil</a></p>")
-                          f.write(f"<h1>{titre}</h1>\n")
+                          f.write("<!DOCTYPE html><html lang='fr'><head><meta charset='UTF-8'><title>" + titre + "</title><style>body{font-family:sans-serif;padding:20px;max-width:1000px;margin:auto;line-height:1.6;} img{max-width:100%;height:auto;}</style></head><body>")
+                          f.write("<p><a href='../index.html'>← Retour à l'accueil</a></p>")
+                          f.write("<h1>" + titre + "</h1>\n")
                           f.write(contenu_propre)
                           f.write("</body></html>")
               except Exception as e:
-                  print(f"Erreur sur {titre}:
+                  print(f"Erreur sur {titre}: {e}")
+
+          print("2. Génération de la page d'accueil (index.html
