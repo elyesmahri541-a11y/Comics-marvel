@@ -22,7 +22,7 @@ jobs:
       - name: Installer les outils nécessaires
         run: pip install requests beautifulsoup4
 
-      - name: Lancer le script de téléchargement des comics récents
+      - name: Télécharger les fiches et générer l'Index HTML
         run: |
           python - <<'EOF'
           import os
@@ -34,9 +34,7 @@ jobs:
 
           headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
 
-          print("Recherche des dernières modifications et créations de comics sur Fandom...")
-
-          # On demande à Fandom les 50 dernières fiches créées ou éditées récemment
+          print("1. Recherche des dernières modifications sur Fandom...")
           url_recent = "https://marvel.fandom.com/api.php?action=query&list=recentchanges&rclimit=50&rcnamespace=0&format=json"
 
           titres_a_importer = set()
@@ -46,43 +44,30 @@ jobs:
               changes = res.get("query", {}).get("recentchanges", [])
               for c in changes:
                   title = c.get("title", "")
-                  # On s'assure d'importer des fiches d'articles récents
-                  if title and not title.startswith("Category:") and not title.startswith("File:"):
+                  if title and not title.startswith("Category:") and not title.startswith("File:") and not title.startswith("Talk:"):
                       titres_a_importer.add(title)
           except Exception as e:
               print(f"Erreur lors de la récupération : {e}")
 
-          print(f"Nombre de fiches récentes trouvées : {len(titres_a_importer)}")
+          print(f"fiches à télécharger : {len(titres_a_importer)}")
 
-          # Téléchargement de chaque fiche
+          # Importation des pages HTML
           for titre in titres_a_importer:
-              print(f"Importation : {titre}...")
               url_parse = f"https://marvel.fandom.com/api.php?action=parse&page={titre.replace(' ', '_')}&format=json"
               try:
                   res_parse = requests.get(url_parse, headers=headers).json()
                   if "parse" in res_parse:
                       contenu_html = res_parse["parse"]["text"]["*"]
-                      
-                      # Redirection des liens internes vers ton propre dossier local
                       contenu_propre = re.sub(r'href="/wiki/', r'href="./', contenu_html)
 
-                      # Nettoyage du nom de fichier
                       nom_clean = titre.replace(' ', '_').replace('/', '_').replace(':', '_').replace('?', '')
                       nom_fichier = f"docs/{nom_clean}.html"
 
                       with open(nom_fichier, "w", encoding="utf-8") as f:
+                          f.write(f"<!DOCTYPE html><html lang='fr'><head><meta charset='UTF-8'><title>{titre}</title><style>body{{font-family:sans-serif;padding:20px;max-width:1000px;margin:auto;line-height:1.6;}} img{{max-width:100%;height:auto;}}</style></head><body>")
+                          f.write(f"<p><a href='../index.html'>← Retour à l'accueil</a></p>")
                           f.write(f"<h1>{titre}</h1>\n")
                           f.write(contenu_propre)
-                          
-                      print(f"Enregistré : {nom_fichier}")
+                          f.write("</body></html>")
               except Exception as e:
-                  print(f"Erreur lors du téléchargement de {titre}: {e}")
-          EOF
-
-      - name: Envoyer les changements sur le site
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add .
-          git commit -m "Mise à jour automatique des fiches Marvel récentes" || exit 0
-          git push
+                  print(f"Erreur sur {titre}:
