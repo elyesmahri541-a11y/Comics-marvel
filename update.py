@@ -8,28 +8,47 @@ if not os.path.exists("docs"):
 
 headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
 
-print("1. Recherche intelligente des comics via l'API de recherche Fandom...")
+print("1. Récupération intégrale de TOUS les comics de 2026 (Pagination active)...")
+
+# Les catégories officielles sur Marvel Database Fandom
+categories = [
+    "Category:2026_Comic_Books",
+    "Category:Comics_released_in_2026",
+    "Category:2026_issues"
+]
 
 titres_a_importer = set()
 
-# On interroge l'API de recherche pour trouver les fiches de 2026
-url_search = "https://marvel.fandom.com/api.php?action=query&list=search&srsearch=2026&srlimit=500&format=json"
+for cat in categories:
+    cmcontinue = ""
+    print(f"Examen de la catégorie : {cat}")
+    while True:
+        url = f"https://marvel.fandom.com/api.php?action=query&list=categorymembers&cmtitle={cat}&cmlimit=500&format=json"
+        if cmcontinue:
+            url += f"&cmcontinue={cmcontinue}"
+        
+        try:
+            res = requests.get(url, headers=headers).json()
+            query = res.get("query", {})
+            members = query.get("categorymembers", [])
+            
+            for m in members:
+                title = m["title"]
+                if title and not title.startswith("Category:") and not title.startswith("File:") and not title.startswith("Talk:") and not title.startswith("Template:"):
+                    titres_a_importer.add(title)
+            
+            # Si Fandom indique qu'il y a d'autres pages dans cette catégorie, on continue
+            if "continue" in res and "cmcontinue" in res["continue"]:
+                cmcontinue = res["continue"]["cmcontinue"]
+            else:
+                break
+        except Exception as e:
+            print(f"Erreur sur {cat}: {e}")
+            break
 
-try:
-    res = requests.get(url_search, headers=headers).json()
-    search_results = res.get("query", {}).get("search", [])
-    
-    for item in search_results:
-        title = item["title"]
-        # On filtre pour ne garder que les fiches pertinentes (comics, séries, numéros)
-        if title and not title.startswith("Category:") and not title.startswith("File:") and not title.startswith("Talk:") and not title.startswith("Template:"):
-            if "Vol" in title or "#" in title or "2026" in title or "Comic" in title:
-                titres_a_importer.add(title)
-except Exception as e:
-    print(f"Erreur lors de la recherche : {e}")
+print(f"Total cumulé de comics 2026 trouvés : {len(titres_a_importer)}")
 
-print(f"Nombre de comics trouvés : {len(titres_a_importer)}")
-
+print("2. Téléchargement des fiches HTML...")
 for titre in titres_a_importer:
     url_parse = f"https://marvel.fandom.com/api.php?action=parse&page={titre.replace(' ', '_')}&format=json"
     try:
@@ -50,7 +69,7 @@ for titre in titres_a_importer:
     except Exception as e:
         print(f"Erreur sur {titre}: {e}")
 
-print("2. Génération de la page d'accueil (index.html)...")
+print("3. Génération de la page d'accueil (index.html)...")
 
 fichiers = [f for f in os.listdir("docs") if f.endswith(".html")]
 fichiers.sort()
@@ -119,4 +138,3 @@ with open("index.html", "w", encoding="utf-8") as f:
     f.write(final_html)
 
 print("Index.html créé avec succès !")
-
