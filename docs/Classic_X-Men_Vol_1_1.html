@@ -449,12 +449,12 @@ Iceman covers his raft in an ice-bubble just before it is sucked into the whirlp
 
 <!-- 
 NewPP limit report
-Cached time: 20261022215104
-Cache expiry: 2592000
+Cached time: 20261024060921
+Cache expiry: 1209600
 Reduced expiry: false
 Complications: [vary‐revision‐sha1, no‐toc]
-CPU time usage: 0.851 seconds
-Real time usage: 1.028 seconds
+CPU time usage: 1.244 seconds
+Real time usage: 1.344 seconds
 Preprocessor visited node count: 4953/1000000
 Post‐expand include size: 61546/2097152 bytes
 Template argument size: 136/2097152 bytes
@@ -462,23 +462,35 @@ Highest expansion depth: 7/100
 Expensive parser function count: 5/100
 Unstrip recursion depth: 0/20
 Unstrip post‐expand size: 4663/5000000 bytes
-Lua time usage: 0.679/7.000 seconds
-Lua memory usage: 9522963/104857600 bytes
+Lua time usage: 1.039/7.000 seconds
+Lua memory usage: 9531872/104857600 bytes
+Lua Profile:
+    ?                                                                440 ms       41.5%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::expandTemplate      340 ms       32.1%
+    recursiveClone <mwInit.lua:45>                                    80 ms        7.5%
+    init <Module:Design>                                              40 ms        3.8%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::find       40 ms        3.8%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::getExpandedArgument       20 ms        1.9%
+    type                                                              20 ms        1.9%
+    <mw.title.lua:50>                                                 20 ms        1.9%
+    <Dev:Arguments:393>                                               20 ms        1.9%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::gsub       20 ms        1.9%
+    [others]                                                          20 ms        1.9%
 -->
 <!--
 Transclusion expansion time report (%,ms,calls,template)
-100.00%  897.280      1 Marvel_Database:Comic_Template
-100.00%  897.280      1 -total
-  3.67%   32.898     26 Template:A
-  1.37%   12.298      5 Template:Cl
-  0.88%    7.889      1 Template:WP
-  0.76%    6.859      7 Template:Joins
-  0.74%    6.629     18 Template:1st
-  0.66%    5.933      9 Template:Flashback
-  0.50%    4.531      1 Template:R
-  0.40%    3.633     15 Template:Mentioned
+100.00% 1226.250      1 Marvel_Database:Comic_Template
+100.00% 1226.250      1 -total
+  2.72%   33.360     26 Template:A
+  1.16%   14.211      5 Template:Cl
+  0.82%   10.065     18 Template:1st
+  0.77%    9.423      9 Template:Flashback
+  0.75%    9.154      7 Template:Joins
+  0.63%    7.720      1 Template:R
+  0.44%    5.447      1 Template:WP
+  0.43%    5.282      4 Template:Unnamed
 -->
 
-<!-- Saved in parser cache with key 1.43.9_prod_enmarveldatabase:pcache:idhash:111690-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20261022215104 and revision id 10372397. Rendering was triggered because: page-view
+<!-- Saved in parser cache with key 1.43.9_prod_enmarveldatabase:pcache:idhash:111690-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20261024060921 and revision id 10372397. Rendering was triggered because: unknown
  -->
 </div></body></html>

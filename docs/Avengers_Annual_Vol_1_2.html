@@ -469,12 +469,12 @@
 
 <!-- 
 NewPP limit report
-Cached time: 20261022174332
+Cached time: 20261024044146
 Cache expiry: 2592000
 Reduced expiry: false
 Complications: [vary‐revision‐sha1, no‐toc]
-CPU time usage: 1.189 seconds
-Real time usage: 1.233 seconds
+CPU time usage: 1.482 seconds
+Real time usage: 1.610 seconds
 Preprocessor visited node count: 6257/1000000
 Post‐expand include size: 134656/2097152 bytes
 Template argument size: 114/2097152 bytes
@@ -482,23 +482,35 @@ Highest expansion depth: 6/100
 Expensive parser function count: 6/100
 Unstrip recursion depth: 0/20
 Unstrip post‐expand size: 56/5000000 bytes
-Lua time usage: 0.891/7.000 seconds
-Lua memory usage: 5298663/104857600 bytes
+Lua time usage: 1.066/7.000 seconds
+Lua memory usage: 5299004/104857600 bytes
+Lua Profile:
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::expandTemplate      520 ms       44.8%
+    ?                                                                180 ms       15.5%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::preprocess      140 ms       12.1%
+    recursiveClone <mwInit.lua:45>                                   120 ms       10.3%
+    (for generator)                                                   60 ms        5.2%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::getExpandedArgument       40 ms        3.4%
+    loadMessages <Dev:I18n:436>                                       20 ms        1.7%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::formatDate       20 ms        1.7%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::uc       20 ms        1.7%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::find       20 ms        1.7%
+    [others]                                                          20 ms        1.7%
 -->
 <!--
 Transclusion expansion time report (%,ms,calls,template)
-100.00% 1168.981      1 Marvel_Database:Comic_Template
-100.00% 1168.981      1 -total
- 10.41%  121.718     96 Template:1st
-  4.08%   47.715     34 Template:A
-  2.94%   34.394     28 Template:Mentioned
-  2.55%   29.852     14 Template:Cl
-  1.13%   13.173      5 Template:WP
-  0.80%    9.356      6 Template:Apn
-  0.65%    7.651      4 Template:RecapOnly
-  0.58%    6.784      5 Template:Invoked
+100.00% 1422.043      1 Marvel_Database:Comic_Template
+100.00% 1422.043      1 -total
+ 10.39%  147.752     96 Template:1st
+  3.34%   47.559     34 Template:A
+  2.82%   40.040     28 Template:Mentioned
+  2.22%   31.508     14 Template:Cl
+  0.80%   11.435      6 Template:Apn
+  0.80%   11.347      5 Template:WP
+  0.67%    9.476      4 Template:RecapOnly
+  0.55%    7.837     23 Template:Flashback
 -->
 
-<!-- Saved in parser cache with key 1.43.9_prod_enmarveldatabase:pcache:idhash:24956-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20261022174332 and revision id 11189451. Rendering was triggered because: page-view
+<!-- Saved in parser cache with key 1.43.9_prod_enmarveldatabase:pcache:idhash:24956-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20261024044146 and revision id 11189451. Rendering was triggered because: page-view
  -->
 </div></body></html>

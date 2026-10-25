@@ -757,12 +757,12 @@ Following his multiple deaths and resurrections by the Jackal, Ben's psyche was 
 </ol></div></div>
 <!-- 
 NewPP limit report
-Cached time: 20261022172455
+Cached time: 20261024140540
 Cache expiry: 2592000
 Reduced expiry: false
 Complications: [vary‐revision‐sha1, show‐toc]
-CPU time usage: 1.163 seconds
-Real time usage: 2.438 seconds
+CPU time usage: 2.042 seconds
+Real time usage: 2.199 seconds
 Preprocessor visited node count: 9022/1000000
 Post‐expand include size: 252912/2097152 bytes
 Template argument size: 18145/2097152 bytes
@@ -770,23 +770,35 @@ Highest expansion depth: 11/100
 Expensive parser function count: 28/100
 Unstrip recursion depth: 0/20
 Unstrip post‐expand size: 109484/5000000 bytes
-Lua time usage: 0.560/7.000 seconds
-Lua memory usage: 10848663/104857600 bytes
+Lua time usage: 1.179/7.000 seconds
+Lua memory usage: 10779947/104857600 bytes
+Lua Profile:
+    ?                                                                620 ms       38.3%
+    recursiveClone <mwInit.lua:45>                                   220 ms       13.6%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::preprocess      160 ms        9.9%
+    (for generator)                                                  120 ms        7.4%
+    init <Dev:Fallbacklist>                                          100 ms        6.2%
+    type                                                              60 ms        3.7%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::getExpandedArgument       40 ms        2.5%
+    tonumber                                                          40 ms        2.5%
+    validateData <mw.lua:728>                                         40 ms        2.5%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::getExpensiveData       40 ms        2.5%
+    [others]                                                         180 ms       11.1%
 -->
 <!--
 Transclusion expansion time report (%,ms,calls,template)
-100.00% 1719.617      1 Marvel_Database:Character_Template
-100.00% 1719.617      1 -total
- 38.83%  667.701    247 Template:R
-  1.99%   34.163      7 Template:M
-  1.81%   31.156      4 Template:Sld
-  1.29%   22.267      5 Template:Navigation
-  1.25%   21.511     17 Template:Power
-  1.21%   20.819      5 Template:ShowHide
-  0.79%   13.533     13 Template:Cl
-  0.54%    9.355      1 Template:Quote
+100.00% 1931.668      1 Marvel_Database:Character_Template
+100.00% 1931.668      1 -total
+ 58.93% 1138.305    247 Template:R
+  3.65%   70.561      7 Template:M
+  2.71%   52.309      4 Template:Sld
+  2.48%   47.835      5 Template:Navigation
+  2.28%   44.116      5 Template:ShowHide
+  1.88%   36.225     17 Template:Power
+  1.29%   24.925     13 Template:Cl
+  0.38%    7.288      1 Template:Quote
 -->
 
-<!-- Saved in parser cache with key 1.43.9_prod_enmarveldatabase:pcache:idhash:2511-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20261022172455 and revision id 11195366. Rendering was triggered because: page-view
+<!-- Saved in parser cache with key 1.43.9_prod_enmarveldatabase:pcache:idhash:2511-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20261024140540 and revision id 11195366. Rendering was triggered because: page-view
  -->
 </div></body></html>
