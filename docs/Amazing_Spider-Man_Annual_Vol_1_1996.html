@@ -964,12 +964,12 @@ Two titanic tales of Spider-Man's past! First, a young Peter Parker is ready to 
 
 <!-- 
 NewPP limit report
-Cached time: 20261024033001
-Cache expiry: 1209600
+Cached time: 20261030204606
+Cache expiry: 2592000
 Reduced expiry: false
 Complications: [vary‐revision‐sha1, no‐toc]
-CPU time usage: 1.367 seconds
-Real time usage: 1.652 seconds
+CPU time usage: 2.369 seconds
+Real time usage: 3.214 seconds
 Preprocessor visited node count: 7539/1000000
 Post‐expand include size: 253348/2097152 bytes
 Template argument size: 73/2097152 bytes
@@ -977,23 +977,35 @@ Highest expansion depth: 8/100
 Expensive parser function count: 7/100
 Unstrip recursion depth: 0/20
 Unstrip post‐expand size: 10235/5000000 bytes
-Lua time usage: 0.890/7.000 seconds
-Lua memory usage: 5644939/104857600 bytes
+Lua time usage: 1.548/7.000 seconds
+Lua memory usage: 5647529/104857600 bytes
+Lua Profile:
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::expandTemplate      640 ms       36.4%
+    ?                                                                340 ms       19.3%
+    recursiveClone <mwInit.lua:45>                                   240 ms       13.6%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::preprocess       80 ms        4.5%
+    type                                                              60 ms        3.4%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::getExpandedArgument       60 ms        3.4%
+    init <Dev:Fallbacklist>                                           40 ms        2.3%
+    chunk <Module:Appearances>                                        40 ms        2.3%
+    lua_get_title_volume_issue <Module:StandardizedName:114>          40 ms        2.3%
+    init <Module:Design>                                              20 ms        1.1%
+    [others]                                                         200 ms       11.4%
 -->
 <!--
 Transclusion expansion time report (%,ms,calls,template)
-100.00% 1332.857      1 Marvel_Database:Comic_Template
-100.00% 1332.857      1 -total
- 16.58%  221.027      1 Template:Clone_Saga
- 15.43%  205.617    179 Template:Cl
-  2.80%   37.333     22 Template:Apn
-  2.75%   36.629     36 Template:A
-  1.53%   20.389     21 Template:Mentioned
-  1.31%   17.505     33 Template:FlashOnly
-  0.87%   11.545      1 Template:The_Double
-  0.81%   10.852      1 Template:Maximum_Clonage
+100.00% 2552.702      1 Marvel_Database:Comic_Template
+100.00% 2552.702      1 -total
+ 17.74%  452.919      1 Template:Clone_Saga
+ 16.30%  415.977    179 Template:Cl
+  3.40%   86.677     36 Template:A
+  2.49%   63.524     22 Template:Apn
+  2.03%   51.944     21 Template:Mentioned
+  1.77%   45.279     33 Template:FlashOnly
+  0.87%   22.207      1 Template:The_Double
+  0.83%   21.297      1 Template:The_Exile_Returns
 -->
 
-<!-- Saved in parser cache with key 1.43.9_prod_enmarveldatabase:pcache:idhash:283594-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20261024033001 and revision id 11195384. Rendering was triggered because: page-view
+<!-- Saved in parser cache with key 1.43.9_prod_enmarveldatabase:pcache:idhash:283594-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20261030204606 and revision id 11195384. Rendering was triggered because: page-view
  -->
 </div></body></html>
