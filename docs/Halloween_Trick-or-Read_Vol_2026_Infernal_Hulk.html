@@ -225,12 +225,12 @@ The evil known as Eldest has literally torn Bruce Banner and the Hulk apart and 
 
 <!-- 
 NewPP limit report
-Cached time: 20261031231659
+Cached time: 20261108042210
 Cache expiry: 2592000
 Reduced expiry: false
 Complications: [vary‐revision‐sha1, no‐toc]
-CPU time usage: 0.973 seconds
-Real time usage: 1.098 seconds
+CPU time usage: 1.400 seconds
+Real time usage: 1.481 seconds
 Preprocessor visited node count: 4358/1000000
 Post‐expand include size: 18083/2097152 bytes
 Template argument size: 145/2097152 bytes
@@ -238,23 +238,34 @@ Highest expansion depth: 7/100
 Expensive parser function count: 5/100
 Unstrip recursion depth: 0/20
 Unstrip post‐expand size: 861/5000000 bytes
-Lua time usage: 0.779/7.000 seconds
-Lua memory usage: 6837582/104857600 bytes
+Lua time usage: 1.142/7.000 seconds
+Lua memory usage: 6839240/104857600 bytes
+Lua Profile:
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::expandTemplate      540 ms       47.4%
+    ?                                                                360 ms       31.6%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::preprocess       60 ms        5.3%
+    <mw.language.lua:62>                                              40 ms        3.5%
+    recursiveClone <mwInit.lua:45>                                    40 ms        3.5%
+    type                                                              20 ms        1.8%
+    (for generator)                                                   20 ms        1.8%
+    init <Dev:Fallbacklist>                                           20 ms        1.8%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::getExpandedArgument       20 ms        1.8%
+    insert                                                            20 ms        1.8%
 -->
 <!--
 Transclusion expansion time report (%,ms,calls,template)
-100.00% 1012.591      1 Marvel_Database:Comic_Template
-100.00% 1012.591      1 -total
-  1.35%   13.686      2 Template:R
-  0.69%    7.008      1 Template:G
-  0.65%    6.585      7 Template:1st
-  0.43%    4.364      1 Template:Possesses
-  0.43%    4.312      4 Template:Mentioned
-  0.40%    4.024      1 Template:1st_Dies
-  0.39%    3.951      1 Template:Resurrection
-  0.36%    3.623     19 Template:Cameo
+100.00% 1420.751      1 Marvel_Database:Comic_Template
+100.00% 1420.751      1 -total
+  1.04%   14.799      2 Template:R
+  0.51%    7.283      1 Template:G
+  0.45%    6.350      7 Template:1st
+  0.26%    3.685      4 Template:Mentioned
+  0.23%    3.276      1 Template:1st_Dies
+  0.23%    3.270      4 Template:Invoked
+  0.23%    3.219      1 Template:Resurrection
+  0.22%    3.141     19 Template:Cameo
 -->
 
-<!-- Saved in parser cache with key 1.43.9_prod_enmarveldatabase:pcache:idhash:2120428-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20261031231659 and revision id 11220035. Rendering was triggered because: page-view
+<!-- Saved in parser cache with key 1.43.10_prod_enmarveldatabase:pcache:idhash:2120428-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20261108042210 and revision id 11220035. Rendering was triggered because: api-parse
  -->
 </div></body></html>

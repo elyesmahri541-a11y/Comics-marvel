@@ -433,12 +433,12 @@ Prepare for the All-New, All-Deadly: DARK MARY-JANE!! Oops, sorry, that's the re
 
 <!-- 
 NewPP limit report
-Cached time: 20261030172400
-Cache expiry: 1209600
+Cached time: 20261108042304
+Cache expiry: 2592000
 Reduced expiry: false
 Complications: [vary‐revision‐sha1, no‐toc]
-CPU time usage: 0.954 seconds
-Real time usage: 1.040 seconds
+CPU time usage: 1.592 seconds
+Real time usage: 1.787 seconds
 Preprocessor visited node count: 4980/1000000
 Post‐expand include size: 50789/2097152 bytes
 Template argument size: 86/2097152 bytes
@@ -446,23 +446,35 @@ Highest expansion depth: 6/100
 Expensive parser function count: 5/100
 Unstrip recursion depth: 0/20
 Unstrip post‐expand size: 5641/5000000 bytes
-Lua time usage: 0.707/7.000 seconds
-Lua memory usage: 4969651/104857600 bytes
+Lua time usage: 1.166/7.000 seconds
+Lua memory usage: 4971300/104857600 bytes
+Lua Profile:
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::expandTemplate      640 ms       54.2%
+    ?                                                                120 ms       10.2%
+    recursiveClone <mwInit.lua:45>                                   120 ms       10.2%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::getExpandedArgument       60 ms        5.1%
+    init <Dev:Fallbacklist>                                           40 ms        3.4%
+    init <Dev:I18n>                                                   40 ms        3.4%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::preprocess       20 ms        1.7%
+    useUserLang <Dev:I18n:323>                                        20 ms        1.7%
+    (for generator)                                                   20 ms        1.7%
+    MediaWiki\Extension\Scribunto\Engines\LuaSandbox\LuaSandboxCallback::getContent       20 ms        1.7%
+    [others]                                                          80 ms        6.8%
 -->
 <!--
 Transclusion expansion time report (%,ms,calls,template)
-100.00%  950.539      1 Marvel_Database:Comic_Template
-100.00%  950.539      1 -total
-  5.76%   54.736     55 Template:A
-  1.80%   17.081      1 Template:Apn
-  0.76%    7.196      6 Template:Mentioned
-  0.71%    6.767      4 Template:Fb
-  0.69%    6.576      3 Template:Cl
-  0.62%    5.912      5 Template:Cameo
-  0.62%    5.854      5 Template:Referenced
-  0.60%    5.692      5 Template:FlashOnly
+100.00% 1644.039      1 Marvel_Database:Comic_Template
+100.00% 1644.039      1 -total
+  7.01%  115.285     55 Template:A
+  1.64%   26.969      1 Template:Apn
+  0.98%   16.107      5 Template:Cameo
+  0.86%   14.061      6 Template:Mentioned
+  0.79%   12.911      5 Template:FlashOnly
+  0.78%   12.843      4 Template:Fb
+  0.71%   11.668      5 Template:Referenced
+  0.61%   10.084      3 Template:Cl
 -->
 
-<!-- Saved in parser cache with key 1.43.9_prod_enmarveldatabase:pcache:idhash:261855-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20261030172400 and revision id 10645891. Rendering was triggered because: page-view
+<!-- Saved in parser cache with key 1.43.10_prod_enmarveldatabase:pcache:idhash:261855-0!sseVary=RegularPage!FandomDesktop!LegacyGalleries and timestamp 20261108042304 and revision id 10645891. Rendering was triggered because: api-parse
  -->
 </div></body></html>
